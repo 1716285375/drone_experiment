@@ -8,6 +8,9 @@ import numpy as np
 
 
 class Flatten(nn.Module):
+    def __init__(self):
+        super(Flatten, self).__init__()
+
     def forward(self, x):
         return x.contiguous().view(x.size(0), -1)
 
@@ -38,4 +41,31 @@ class CnnDQN(nn.Module):
         x = x.view(-1, 128 * 21 * 21)  # 展平
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
+        return x
+
+
+class CNN(nn.Module):
+    def __init__(self, input_channel, num_actions):
+        super(CNN, self).__init__()
+        self.input_channel = input_channel
+        self.num_actions = num_actions
+        self.flatten = Flatten()
+
+        self.layer1 = nn.Sequential(
+            nn.Conv2d(in_channels=self.input_channel, out_channels=32, kernel_size=4, stride=4, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=1, stride=1, padding=1),
+            nn.ReLU()
+        )
+        self.layer2 = nn.Sequential(
+            nn.Linear(64 * 7 * 11, 512),
+            nn.Linear(512, self.num_actions)
+        )
+
+    def forward(self, x):
+        x = self.layer1(x)
+        x = self.flatten(x)
+        x = self.layer2(x)
         return x

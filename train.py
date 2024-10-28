@@ -1,15 +1,13 @@
-import random
+from model.model import *
+from common.utils import *
+
 import math
 
-import gym
-from gym.envs.registration import register
-from experiment.airgym.envs.drone_env import AirSimDroneEnv
-
-import airsim
+import gymnasium as gym
+from gymnasium.envs.registration import register
 
 import torch
 
-from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 
@@ -18,10 +16,6 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 # 忽略所有 DeprecationWarning 警告
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-
-
-from model.model import *
-from common.utils import *
 
 
 register(
@@ -132,8 +126,8 @@ if __name__ == "__main__":
             else:
                 state = torch.tensor(obs, dtype=torch.float32).unsqueeze(0)
                 # print(state.shape)
-                action = model(state.to(DEVICE)).argmax().item()
-            next_obs, reward, done, _ = env.step(action)
+                action = 2
+            next_obs, reward, done, _ = env.step(model(state.to(DEVICE)).argmax().item().action)
             print("Action: {} | Reward: {} | done: {}".format(action, reward, done))
 
             replay_buffer.push(obs, action, reward, next_obs, done)

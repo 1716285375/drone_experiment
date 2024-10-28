@@ -16,7 +16,9 @@ class ReplayBuffer(object):
 
     def push(self, state, action, reward, next_state, done):
         """将数据加入buffer"""
-        self.buffer.append((state, action, reward, next_state, done))   # 将数据加入buffer
+        if len(self.buffer) >= self.buffer.maxlen:
+            self.buffer.popleft()
+        self.buffer.append((state, action, reward, next_state, done))  # 将数据加入buffer
 
     def sample(self, batch_size):
         """随机检索Batch_Size大小的样本并返回"""
