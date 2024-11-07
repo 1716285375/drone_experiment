@@ -20,7 +20,7 @@ register(
 
 if __name__ == '__main__':
 
-    env = gym.make('AirSimDrone-v0',)
+    env = gym.make('AirSimDrone-v0')
 
     for episode in range(10):
         env.reset()

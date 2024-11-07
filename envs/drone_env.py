@@ -21,6 +21,7 @@ class AirSimDroneEnv(AirSimEnv):
 
         self.leader = self.drone_client[0]
         self.follower = self.drone_client[1]
+        self.measure = self.drone_client[2]                         # 单开一个client轮询状态
 
         self.airsim_cfg = json.load(open(r"C:\Users\jie\Documents\AirSim\settings.json", encoding='utf-8'))        # 加载AirSim配置文件
         self.drone_name = {}    # 无人机名字
